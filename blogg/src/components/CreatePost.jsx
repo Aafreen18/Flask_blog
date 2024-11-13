@@ -31,7 +31,7 @@ const CreatePost = (props) => {
   const addEvent = async () => {
     console.log("blog posted");
     try {
-      const response = await fetch('https://sdcblogproject.onrender.com/api/blogs/', {
+      const response = await fetch('https://flask-blog-boic.onrender.com/api/blogs', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

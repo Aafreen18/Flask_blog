@@ -17,7 +17,7 @@ const Register = (props) => {
         e.preventDefault();
         console.log("Form data:", formData);
         try {
-            const response = await fetch("https://sdcblogproject.onrender.com/register/", {
+            const response = await fetch("https://flask-blog-boic.onrender.com/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -28,7 +28,7 @@ const Register = (props) => {
             if (response.ok) {
                 console.log("Registration successful!");
                 try {
-                    const response = await fetch("https://sdcblogproject.onrender.com/api/token/", {
+                    const response = await fetch("https://flask-blog-boic.onrender.com/login", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",

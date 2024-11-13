@@ -16,7 +16,7 @@ const Login = () => {
         setError(null);
 
         try {
-            const response = await fetch("https://sdcblogproject.onrender.com/api/token/", {
+            const response = await fetch("https://flask-blog-boic.onrender.com/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
