@@ -1,0 +1,79 @@
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.register-container{
+  display: grid;
+  place-items: center; 
+  height: 100vh;
+  width: 100%;
+}
+
+.registerForm{
+  padding: 2.3rem;
+  border-radius: 10px;
+  background-color: rgb(243, 158, 67);
+}
+
+.input-container{
+  margin: 1rem;
+  z-index: 1000;
+}
+
+label{
+  display: none;
+}
+
+.input{
+  outline: none;
+  width: 100%;
+  border: 2px solid black;
+  padding: 0.6rem 1.2rem;
+  font-weight: 1rem;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+}
+
+.nav-bar{
+  background-color: rgb(243, 158, 67);
+  height: 100px;
+}
+
+.container{
+  margin-top: 5%;
+  margin-bottom: 5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;          
+}
+
+.write{
+  height: 100px;
+  width: 400px;
+  padding: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+.writeDiv{
+  height: auto;
+  width: 400px;
+  padding: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+.addBtn:hover {
+  background-color: rgb(243, 158, 67) !important; 
+  color: white !important;
+}
+
+.displayPost{
+  margin-left: 5%;
+  height: 150px;
+  width: 250px;
+  padding: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+}
