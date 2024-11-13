@@ -39,7 +39,7 @@ const Register = (props) => {
                     if (response.ok) {
                         const data = await response.json();
                         console.log(data);
-                        const access = data["Access Token"];
+                        const access = data["access_token"];
                         const refresh = data["Refresh Token"];
                         props.accessToken = access;
                         localStorage.setItem("access", access); 

@@ -29,7 +29,7 @@ const Login = () => {
             if (response.ok) {
                     const data = await response.json();
                     console.log(data);
-                    const access = data["Access Token"];
+                    const access = data["access_token"];
                     const refresh = data["Refresh Token"];
                     localStorage.setItem("access", access); 
                     localStorage.setItem("refresh", refresh);
