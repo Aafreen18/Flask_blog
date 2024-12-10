@@ -1,67 +1,95 @@
-import React, { useState,useEffect } from 'react';
-import DisplayPost from "./DisplayPost";
+import React, { useState, useEffect } from 'react';
+import DisplayPost from './DisplayPost';
+import { useLocation } from 'react-router-dom';
 import CreatePost from './CreatePost';
+import Navbar from './Navbar';
 
-const Home = () =>{
+const Home = () => {
+  const location = useLocation();
+  const [addItems, setItems] = useState([]);
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [jwtToken, setJwtToken] = useState(null);
+  const [refreshToken, setRefreshToken] = useState(null);
 
-    const[addItems, setItems] = useState([]);
-    const [jwtToken, setJwtToken] = useState(null);
-
-    useEffect(() => {
-        // Parse the query parameters from the URL
-        const params = new URLSearchParams(window.location.search);
-        const token = params.get('access'); // Get the "access" parameter
-        setJwtToken(token); // Set the token in state or use it as needed
-
-        console.log("JWT Token:", token);
-    }, []); // Empty dependency array means this runs only once on load
-
-    const addPosts = (posts) => {
-        console.log("added post")
-        setItems((preVal) => {
-        return [ ...preVal, posts]
-        });
+  useEffect(() => {
+    if (location.state) {
+      setUsername(location.state.username || '');
+      setEmail(location.state.email || '');
     }
 
-    const deleteNote = (id) => {
-        setItems((preVal) => {
-        return preVal.filter((currData, index)=> {
-            return index !== id;
-        })
-        });
+    const accessToken = localStorage.getItem('access');
+    const storedRefreshToken = localStorage.getItem("refresh");
+    console.log(storedRefreshToken);
+    console.log(accessToken);
+
+    if (accessToken) {
+      setJwtToken(accessToken);
+      localStorage.setItem('access', accessToken);
     }
 
-    return(
-        <>
-            <div className='nav-bar align-content-center'>
-                <div className='d-flex justify-content-start align-items-center ms-5'>
-                    <h1 className='text-white text-center'>BLOG</h1>
-                </div>
-            </div>
+    if (storedRefreshToken) {
+      setRefreshToken(storedRefreshToken);
+    } else {
+      console.warn('No refresh token found');
+    }
+  }, [location.state]);
 
-            <CreatePost passPosts = {addPosts} jwtToken={jwtToken} />
-        
-        
-            <div className="writtenNotes" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap:'10px',marginBottom:'15px' }}>
-                
-                {
-                    addItems.map((curEle,idx) => {
-                        return <DisplayPost 
-                        title={curEle.title}
-                        content={curEle.content} 
-                        deleteItem = {deleteNote}
-                        id={idx}/>
-                    })
-                }
-            </div>
-            
-        
-        </>
+  useEffect(() => {
+    console.log('JWT Token:', jwtToken);
+  }, [jwtToken]); 
 
-        
-    );
+  const addPosts = (posts) => {
+    setItems((prevVal) => {
+      return [...prevVal, { ...posts, key: Date.now() }];
+    });
+  };
 
-    
-}
+  const deleteNote = (id) => {
+    setItems((prevVal) => {
+      return prevVal.filter((currData, index) => index !== id);
+    });
+  };
+
+  return (
+    <>
+      <Navbar  username = {username} email = {email} />
+
+      {jwtToken && refreshToken ? (
+        <CreatePost
+          passPosts={addPosts}
+          jwtToken={jwtToken}
+          refreshToken={refreshToken}
+          username = {username}
+        />
+      ) : (
+        <p>Loading...</p>
+      )}
+
+      <div
+        className="writtenNotes"
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          gap: '10px',
+          marginBottom: '15px',
+        }}
+      >
+        {addItems.map((curEle, idx) => {
+          return (
+            <DisplayPost
+              key={curEle.key}
+              title={curEle.title}
+              content={curEle.content}
+              deleteItem={deleteNote}
+              id={idx}
+            />
+          );
+        })}
+      </div>
+    </>
+  );
+};
 
 export default Home;

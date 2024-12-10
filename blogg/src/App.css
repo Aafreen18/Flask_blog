@@ -42,19 +42,26 @@ label{
 }
 
 .container{
-  margin-top: 5%;
   margin-bottom: 5%;
   display: flex;
-  justify-content: center;
-  align-items: center;          
+  width: 100% !important;
+  justify-content:space-between !important;
+  align-items:center;  
+  margin: 0; 
+  padding: 10px;
+  margin-right: 10%;     
+  background-color:bisque;
+  box-sizing: border-box;
 }
 
 .write{
-  height: 100px;
-  width: 400px;
+  height: 80px;
+  width: 100%;
   padding: 10px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
   position: relative;
+  background-color: white;
+  margin-left: 0;
 }
 
 .writeDiv{
@@ -74,6 +81,13 @@ label{
   margin-left: 5%;
   height: 150px;
   width: 250px;
-  padding: 10px;
+  padding: 15px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+  overflow-y: auto;
 }
+
+.deleteBtn:hover {
+  background-color: rgb(243, 158, 67) !important; 
+  color: white !important;
+}
+

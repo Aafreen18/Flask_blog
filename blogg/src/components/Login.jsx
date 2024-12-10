@@ -16,7 +16,7 @@ const Login = () => {
         setError(null);
 
         try {
-            const response = await fetch("https://flask-blog-boic.onrender.com/login", {
+            const response = await fetch("https://sdcblogproject.onrender.com/login/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -24,22 +24,21 @@ const Login = () => {
                 body: JSON.stringify(credentials),
             });
 
-            
-
             if (response.ok) {
                     const data = await response.json();
                     console.log(data);
-                    const access = data["access_token"];
-                    const refresh = data["Refresh Token"];
+                    const access = data.access;
+                    const refresh = data.refresh;
                     localStorage.setItem("access", access); 
                     localStorage.setItem("refresh", refresh);
-                    navigate(`/home?access=${access}`);
+                    console.log(access);
+                    navigate('/home', { state: { username: credentials.username } });
                 } else {
                     setError("Invalid username or password.");
                 }
             } catch (error) {
                 setError("An error occurred. Please try again later.");
-            }
+            }    
             
         };
 

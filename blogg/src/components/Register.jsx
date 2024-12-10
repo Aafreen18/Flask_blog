@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Register = (props) => {
+const Register = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({ username: "", password: "", email: ""});
     const [error, setError] = useState("");
@@ -16,8 +16,9 @@ const Register = (props) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log("Form data:", formData);
+        
         try {
-            const response = await fetch("https://flask-blog-boic.onrender.com/register", {
+            const response = await fetch("https://sdcblogproject.onrender.com/register/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -26,9 +27,8 @@ const Register = (props) => {
             });
 
             if (response.ok) {
-                console.log("Registration successful!");
                 try {
-                    const response = await fetch("https://flask-blog-boic.onrender.com/login", {
+                    const response = await fetch("https://sdcblogproject.onrender.com/login/", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
@@ -39,17 +39,19 @@ const Register = (props) => {
                     if (response.ok) {
                         const data = await response.json();
                         console.log(data);
-                        const access = data["access_token"];
-                        const refresh = data["Refresh Token"];
-                        props.accessToken = access;
+                        const access = data.access;
+                        const refresh = data.refresh;
                         localStorage.setItem("access", access); 
                         localStorage.setItem("refresh", refresh);
-                        navigate(`/home?access=${access}`);
+                        console.log(access);
+                        navigate('/home', { state: { username: formData.username, email: formData.email } });
+
                     } else {
                         setError("Invalid username or password.");
                     }
                 } catch (error) {
                     setError("An error occurred. Please try again later.");
+                    console.log(error);
                 }
             } else {
                 const data = await response.json();
