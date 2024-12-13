@@ -1,62 +1,38 @@
 import React, { useState } from 'react';
 
-
 const CreatePost = (props) => {
-  const { passPosts, jwtToken, refreshToken, username } = props;
+  const { jwtToken, refreshToken, username, authorId } = props;
   const [show, setShow] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImages, setSelectedImages] = useState([]);
   const [posts, setPosts] = useState({
     title: '',
     content: '',
-    author: '',
-    image: null
+    author_id: authorId,
+    images: []
   });
-
-  
-  console.log("JWT Token:", jwtToken);
-  console.log("JWT Token:", passPosts);
 
   const refreshAccessToken = async () => {
     try {
-        console.log("Attempting to refresh token with:", refreshToken);
-        
         const response = await fetch(`https://sdcblogproject.onrender.com/refresh_token/${refreshToken}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ 
-                refresh: refreshToken 
-            })
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }    
         });
 
-        console.log("Refresh response status:", response.status);
-
-        // Check if the response is OK
         if (response.ok) {
-            const data = await response.json();
-            console.log("Refresh token response:", data);
-            
-            // Update access token in localStorage and state
-            localStorage.setItem('access', data.access);
-            return data.access;
+          const data = await response.json();
+          localStorage.setItem('access', data.access);
+          return data.access;
         } else {
-            // Try to get error details
-            const errorText = await response.text();
-            console.error('Refresh token error response:', errorText);
-
-            // Handle refresh token failure 
-            console.error('Failed to refresh token. Status:', response.status);
-            return null;
+          return null;
         }
     } catch (error) {
-        console.error('Comprehensive Token Refresh Error:', error);
-        return null;
+      console.error('Error refreshing token:', error);
+      return null;
     }
-};
+  };
 
-
-  
   const inputEvent = (event) => {
     const { name, value } = event.target;
 
@@ -70,89 +46,75 @@ const CreatePost = (props) => {
   };
 
   const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      // Create a preview of the image
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setSelectedImage(reader.result);
-        setPosts(prevPosts => ({
-          ...prevPosts,
-          image: file
-        }));
-      };
-      reader.readAsDataURL(file);
-    }
+    const files = Array.from(e.target.files);
+    setSelectedImages((prevImages) => [...prevImages, ...files]); 
   };
-
 
   const addEvent = async () => {
     try {
-        let currentToken = jwtToken;
+        const formData = new FormData();
+        formData.append('title', posts.title);
+        formData.append('content', posts.content);
+        formData.append('author_id', posts.author_id);
 
+        for (let i = 0; i < selectedImages.length; i++) {
+          formData.append('images', selectedImages[i]); 
+        }
+        
+        let currentToken = jwtToken;
         const response = await fetch('https://sdcblogproject.onrender.com/api/blogs/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${currentToken}`
-            },
-            body: JSON.stringify(posts),
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${currentToken}`,
+          },
+          body: formData
         });
 
-        console.log('Initial post response status:', response.status);
-
-        // If unauthorized, try to refresh the token
         if (response.status === 401) {
-            console.log('Token unauthorized, attempting refresh');
             const newToken = await refreshAccessToken();
-            
             if (newToken) {
-                console.log('Got new token, retrying post');
-                const retryResponse = await fetch('https://sdcblogproject.onrender.com/api/blogs/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${newToken}`
-                    },
-                    body: JSON.stringify(posts),
+              const retryResponse = await fetch('https://sdcblogproject.onrender.com/api/blogs/', {
+                  method: 'POST',
+                  headers: {
+                  'Authorization': `Bearer ${newToken}`
+                },
+                body: formData
+              });
+
+              const data = await retryResponse.json();
+              if (retryResponse.ok) {
+                setPosts({
+                  title: '',
+                  content: '',
+                  author_id: authorId,
+                  images: []
                 });
-
-                console.log('Retry post response status:', retryResponse.status);
-
-                const data = await retryResponse.json();
-                if (retryResponse.ok) {
-                    console.log('Post created successfully:', data);
-                    props.passPosts(posts);
-                    setPosts({
-                        title: '',
-                        content: '',
-                        author: ''
-                    });
-                } else {
-                    console.error('Failed to create post:', data);
-                }
+                setSelectedImages([]);
+                setShow(false);
+              } else {
+                console.error('Failed to create post:', data);
+              }
             } else {
-                // Refresh token failed, redirect to login or show error
-                console.error('Authentication completely failed');
-                // Optionally: redirect to login page
-                // window.location.href = '/login';
+              console.error('Authentication completely failed');
             }
         } else {
-            const data = await response.json();
-            if (response.ok) {
-                console.log('Post created successfully:', data);
-                props.passPosts(posts);
-                setPosts({
-                    title: '',
-                    content: '',
-                    author: ''
-                });
-            } else {
-                console.error('Failed to create post:', data);
-            }
+          const data = await response.json();
+          if (response.ok) {
+            setPosts({
+                title: '',
+                content: '',
+                author_id: authorId,
+                images: []
+            });
+            //reload display post from where
+            setSelectedImages([]);
+            setShow(false);
+          } else {
+            console.error('Failed to create post:', data);
+          }
         }
     } catch (error) {
-        console.error('Comprehensive error occurred while creating post:', error);
+      console.error('Error creating post:', error);
     }
   };
 
@@ -160,111 +122,196 @@ const CreatePost = (props) => {
     setShow(false);
   };
 
+  const handlePostInputChange = (event) => {
+    const { name, value } = event.target;
+    setPosts((preVal) => {
+      return {
+        ...preVal,
+        [name]: value
+      };
+    });
+  };
+
   return (
     <>
-      <div className='container ' style={{backgroundColor:""}}>
-        <div className='d-flex flex-column me-3'>
+      {show && (
         <div 
-            className="Me justify-content-center " 
-            style={{ 
-                width: '50px', 
-                height: '50px', 
-                backgroundColor: 'white', 
-                borderRadius: '50%', 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center', 
-                fontWeight: 'bold', 
-                fontSize: '20px', 
-                color: 'black' ,
-                
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 1000
+          }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              backToNormal();
+            }
+          }}
+        >
+          <div 
+            style={{
+              backgroundColor: 'white',
+              padding: '20px',
+              borderRadius: '10px',
+              width: '80%',
+              maxWidth: '500px',
+              maxHeight: '80%',
+              overflowY: 'auto'
             }}
-            >
-            {username && username[0].toUpperCase()}
-        </div>
-          <h4>{username}</h4>
-        </div>
-        
-        {show ? (
-          <div className='d-flex flex-column writeDiv' onDoubleClick={backToNormal}>
-            <h3>
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className='d-flex flex-column'>
+              <div className="d-flex align-items-center">
+                <div 
+                  className="Me justify-content-center " 
+                  style={{ 
+                    width: '50px', 
+                    height: '50px', 
+                    backgroundColor: 'rgb(243, 158, 67)', 
+                    borderRadius: '50%', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center', 
+                    fontWeight: 'bold', 
+                    fontSize: '20px', 
+                    color: 'black',
+                    alignSelf: 'center',
+                    marginBottom: '10px'
+                  }}
+                >
+                  {username && username[0].toUpperCase()}
+                </div>
+                <h4 style={{ textAlign: 'center', marginBottom: '20px' }}>{username}</h4>
+              </div>
+
               <input
                 type='text'
                 name='title'
                 value={posts.title}
                 placeholder='Title'
-                onChange={inputEvent}
-                style={{ width: '100%' }}
-              ></input>
-            </h3>
-            <input
-              type='number'
-              name='author'
-              value={posts.author}
-              placeholder='Author ID'
-              onChange={inputEvent}
-              className='mb-2'
-            ></input>
-            <input
-              type='text'
-              name='content'
-              value={posts.content}
-              placeholder='Write a post...'
-              onChange={inputEvent}
-            ></input>
+                onChange={handlePostInputChange}
+                style={{ 
+                  width: '100%', 
+                  marginBottom: '10px', 
+                  padding: '10px',
+                  border: '1px solid #ddd',
+                  borderRadius: '5px'
+                }}
+              />
 
-<div className="d-flex align-items-center mb-2">
-            <input
-              type="file"
-              id="imageUpload"
-              accept="image/*"
-              onChange={handleImageUpload}
-              style={{ display: 'none' }}
-            />
-            <label 
-              htmlFor="imageUpload" 
-              className="btn btn-outline-secondary me-2"
-              style={{
-                cursor: 'pointer',
-                border: '1px solid rgb(243, 158, 67)',
-                color: 'rgb(243, 158, 67)'
-              }}
-            >
-              Upload Image
-            </label>
-            {selectedImage && (
-              <span className="text-muted">
-                {posts.image ? posts.image.name : 'Image selected'}
-              </span>
-            )}
-          </div>
+              <textarea
+                name='content'
+                value={posts.content}
+                placeholder='Write a post...'
+                onChange={handlePostInputChange}
+                style={{ 
+                  width: '100%', 
+                  marginBottom: '10px', 
+                  padding: '10px',
+                  border: '1px solid #ddd',
+                  borderRadius: '5px',
+                  minHeight: '100px'
+                }}
+              />
 
-            <button
-              onClick={addEvent}
-              className='addBtn'
-              style={{
-                marginTop: '15%',
-                marginLeft: '85%',
-                backgroundColor: 'white',
-                border: '1px solid rgb(243, 158, 67)',
-                color: 'rgb(243, 158, 67)',
-                borderRadius: '50%',
-                padding:"5px"
-              }}
-            >
-              Post
-            </button>
+              <div className="d-flex align-items-center mb-3">
+                <input
+                  type="file"
+                  id="imageUpload"
+                  accept="image/*"
+                  multiple
+                  onChange={handleImageUpload}
+                  style={{ display: 'none' }}
+                />
+                <label 
+                  htmlFor="imageUpload" 
+                  className="btn me-2 butt"
+                  style={{
+                    cursor: 'pointer',
+                    border: '1px solid rgb(243, 158, 67)',
+                    color: 'white',
+                    backgroundColor:'rgb(243, 158, 67)'
+                  }}
+                >
+                  Upload Images
+                </label>
+                {selectedImages.length > 0 && (
+                  <span className="text-muted">
+                    {selectedImages.length} image(s) selected
+                  </span>
+                )}
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <button
+                  onClick={backToNormal}
+                  className='butt'
+                  style={{
+                    marginRight: '10px',
+                    backgroundColor: 'white',
+                    color: 'rgb(243, 158, 67)',
+                    border: '1px solid rgb(243, 158, 67)',
+                    borderRadius: '5px',
+                    padding: '5px 10px'
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={addEvent}
+                  className='butt'
+                  style={{
+                    backgroundColor: 'white',
+                    color: 'rgb(243, 158, 67)',
+                    border: '1px solid rgb(243, 158, 67)',
+                    borderRadius: '5px',
+                    padding: '5px 10px'
+                  }}
+                >
+                  Post
+                </button>
+              </div>
+            </div>
           </div>
-        ) : (
-          <div className='write'>
-            <input
-              className='text-black-50'
-              placeholder='Write a post...'
-              onClick={inputEvent}
-              style={{width:"100%",marginLeft:"0"}}
-            ></input>
+        </div>
+      )}
+
+      <div className='container'>
+        <div className='d-flex flex-column me-3'>
+          <div 
+            className="Me justify-content-center " 
+            style={{ 
+              width: '50px', 
+              height: '50px', 
+              backgroundColor: 'white', 
+              borderRadius: '50%', 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center', 
+              fontWeight: 'bold', 
+              fontSize: '20px', 
+              color: 'black' 
+            }}
+          >
+            {username && username[0].toUpperCase()}
           </div>
-        )}
+          <h4>{username}</h4>
+        </div>
+        
+        <div className='write'>
+          <input
+            className='text-black-50'
+            placeholder='Write a post...'
+            onClick={inputEvent}
+            style={{width:"100%", marginLeft:"0"}}
+          />
+        </div>
       </div>
     </>
   );

@@ -29,9 +29,12 @@ const Login = () => {
                     console.log(data);
                     const access = data.access;
                     const refresh = data.refresh;
+                    const author_id = data.author_id;
                     localStorage.setItem("access", access); 
                     localStorage.setItem("refresh", refresh);
+                    localStorage.setItem("author_id", author_id);
                     console.log(access);
+                    console.log(author_id);
                     navigate('/home', { state: { username: credentials.username } });
                 } else {
                     setError("Invalid username or password.");

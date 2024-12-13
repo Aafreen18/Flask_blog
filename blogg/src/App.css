@@ -45,7 +45,7 @@ label{
   margin-bottom: 5%;
   display: flex;
   width: 100% !important;
-  justify-content:space-between !important;
+  justify-content:center !important;
   align-items:center;  
   margin: 0; 
   padding: 10px;
@@ -70,9 +70,10 @@ label{
   padding: 10px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
   position: relative;
+  background-color: white;
 }
 
-.addBtn:hover {
+.butt:hover {
   background-color: rgb(243, 158, 67) !important; 
   color: white !important;
 }
@@ -86,8 +87,4 @@ label{
   overflow-y: auto;
 }
 
-.deleteBtn:hover {
-  background-color: rgb(243, 158, 67) !important; 
-  color: white !important;
-}
 
