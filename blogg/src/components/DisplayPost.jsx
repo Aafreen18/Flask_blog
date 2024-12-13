@@ -1,9 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const DisplayPost = (props) => {
-  const { title, content, images, idAuthor} = props;
+  const { title, content, images, idAuthor } = props;
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
   const getValidImageUrl = (imageUrl) => {
-    return imageUrl.slice(13) 
+    return imageUrl.slice(13); 
+  };
+
+  const handleNextImage = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+  };
+
+  const handlePrevImage = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
   };
 
   return (
@@ -19,7 +29,7 @@ const DisplayPost = (props) => {
         position: 'relative'
       }}
     >
-      {/* Header with Username */}
+      {/* Header with AuthorId */}
       <div 
         style={{
           display: 'flex',
@@ -42,33 +52,68 @@ const DisplayPost = (props) => {
             color: 'white'
           }}
         >
-          h
+          {idAuthor.charAt(0).toUpperCase()}
         </div>
-        <h4 style={{ fontSize: '16px',color:"black", whiteSpace: "normal", wordBreak: "break-word"  }}>{idAuthor}</h4> 
+        <h4 style={{ fontSize: '16px', color: "black", whiteSpace: "normal", wordBreak: "break-word" }}>{idAuthor}</h4>
       </div>
 
       {/* Image Section */}
       {images && images.length > 0 ? (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '10px' }}>
-          {images.map((image, index) => {
-            const validUrl = `${getValidImageUrl(image["image"])}`;
-            console.log(validUrl);
-
-            return (
-              <img
-                key={index}
-                src={validUrl}
-                alt={`Post ${index + 1}`}
+        <div style={{ position: 'relative', padding: '10px' }}>
+          <img
+            src={`${getValidImageUrl(images[currentImageIndex]["image"])}`}
+            alt={`Post ${currentImageIndex + 1}`}
+            style={{
+              width: '100%',
+              height: '250px',
+              objectFit: 'cover',
+              borderRadius: '8px',
+            }}
+            onError={(e) => { e.target.src = '/path/to/placeholder-image.jpg'; }}
+          />
+          {images.length > 1 && (
+            <>
+              {/* Previous Button */}
+              <button
+                onClick={handlePrevImage}
                 style={{
-                  width: '100%',
-                  height: '250px',
-                  objectFit: 'cover',
-                  borderRadius: '8px',
+                  position: 'absolute',
+                  top: '50%',
+                  left: '10px',
+                  transform: 'translateY(-50%)',
+                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '50%',
+                  width: '30px',
+                  height: '30px',
+                  cursor: 'pointer',
                 }}
-                onError={(e) => { e.target.src = '/path/to/placeholder-image.jpg'; }}
-              />
-            );
-          })}
+              >
+                ‹
+              </button>
+
+              {/* Next Button */}
+              <button
+                onClick={handleNextImage}
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  right: '10px',
+                  transform: 'translateY(-50%)',
+                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '50%',
+                  width: '30px',
+                  height: '30px',
+                  cursor: 'pointer',
+                }}
+              >
+                ›
+              </button>
+            </>
+          )}
         </div>
       ) : (
         <div style={{ 

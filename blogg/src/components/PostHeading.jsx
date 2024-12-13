@@ -18,6 +18,7 @@ const PostHeading = () => {
           align-items: center;
           min-height: 200px;
           padding: 30px 10px;
+          background: linear-gradient(120deg, #ffc3a0, rgb(243, 158, 67));
           box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
 
@@ -39,7 +40,7 @@ const PostHeading = () => {
           font-family: 'Poppins', sans-serif;
           font-size: 4rem;
           font-weight: 700;
-          background: linear-gradient(45deg, #ff9966, #ff5e62);
+          background: linear-gradient(45deg, #eeede7, white);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
@@ -63,12 +64,7 @@ const PostHeading = () => {
           transform: translateX(-50%);
           width: 120px;
           height: 4px;
-          background: linear-gradient(
-            to right, 
-            #ff9966, 
-            rgba(255, 153, 102, 0.5)
-          );
-          border-radius: 2px;
+          background: linear-gradient(120deg, #eeede7, white);
           box-shadow: 0 2px 15px rgba(255, 153, 102, 0.5);
         }
 

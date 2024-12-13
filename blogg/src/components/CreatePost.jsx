@@ -176,7 +176,7 @@ const CreatePost = (props) => {
             <div className='d-flex flex-column'>
               <div className="d-flex align-items-center">
                 <div 
-                  className="Me justify-content-center " 
+                  className="Me justify-content-center" 
                   style={{ 
                     width: '50px', 
                     height: '50px', 
@@ -189,7 +189,8 @@ const CreatePost = (props) => {
                     fontSize: '20px', 
                     color: 'black',
                     alignSelf: 'center',
-                    marginBottom: '10px'
+                    marginBottom: '10px',
+                    marginRight:'5px'
                   }}
                 >
                   {username && username[0].toUpperCase()}
@@ -296,7 +297,7 @@ const CreatePost = (props) => {
             style={{ 
               width: '50px', 
               height: '50px', 
-              backgroundColor: 'white', 
+              backgroundColor: 'rgb(243, 158, 67)', 
               borderRadius: '50%', 
               display: 'flex', 
               alignItems: 'center', 
