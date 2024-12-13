@@ -3,6 +3,7 @@ import DisplayPost from './DisplayPost';
 import { useLocation } from 'react-router-dom';
 import CreatePost from './CreatePost';
 import Navbar from './Navbar';
+import PostHeading from './PostHeading';
 
 const Home = () => {
   const location = useLocation();
@@ -83,6 +84,8 @@ const Home = () => {
         <p>Loading...</p>
       )}
 
+      <PostHeading />
+
       <div
         className="writtenNotes"
         style={{
@@ -90,6 +93,7 @@ const Home = () => {
           flexDirection: 'row',
           flexWrap: 'wrap',
           gap: '10px',
+          justifyContent:"center",
           marginBottom: '15px',
         }}
       >
@@ -99,8 +103,7 @@ const Home = () => {
             title={curEle.title}
             content={curEle.content}
             images={curEle.images}
-            id={idx}
-            username={curEle.username}
+            idAuthor={curEle.author_id}
           />
         ))}
       </div>

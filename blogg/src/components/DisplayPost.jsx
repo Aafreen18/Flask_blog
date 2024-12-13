@@ -1,10 +1,9 @@
 import React from 'react';
 
 const DisplayPost = (props) => {
-  const { title, content, images, id, username } = props;
+  const { title, content, images, idAuthor} = props;
   const getValidImageUrl = (imageUrl) => {
-    return imageUrl.slice(13)
-    
+    return imageUrl.slice(13) 
   };
 
   return (
@@ -43,15 +42,13 @@ const DisplayPost = (props) => {
             color: 'white'
           }}
         >
-          {username && username[0].toUpperCase()}
+          h
         </div>
-        <h4 style={{ margin: 0, fontSize: '16px',color:"black" }}>{username}</h4>
-
-       
+        <h4 style={{ fontSize: '16px',color:"black", whiteSpace: "normal", wordBreak: "break-word"  }}>{idAuthor}</h4> 
       </div>
 
       {/* Image Section */}
-       {images && images.length > 0 ? (
+      {images && images.length > 0 ? (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '10px' }}>
           {images.map((image, index) => {
             const validUrl = `${getValidImageUrl(image["image"])}`;
