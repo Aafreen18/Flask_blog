@@ -1,17 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from 'react-router-dom';
 
-const ShowPostSeparately = ({ username = 'Guest' }) =>{
+const ShowPostSeparately = () =>{
     const location = useLocation();
     const { blog_id } = location.state;
-    const initials = username.slice(0, 2).toUpperCase();
+    const [username, setUsername] = useState('');
 
     const [blogPost, setBlogPost] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const getValidImageUrl = (imageUrl) => {
+    return imageUrl; 
+    };
+
+    const handleNextImage = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % blogPost.images.length);
+    };
+
+    const handlePrevImage = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex - 1 + blogPost.images.length) % blogPost.images.length);
+    };
+
     const cardStyle = {
-        padding: '24px',
+        padding: '10px',
         textAlign: 'center',
         boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
         transition: 'transform 0.3s ease',
@@ -20,21 +33,21 @@ const ShowPostSeparately = ({ username = 'Guest' }) =>{
     };
     
     const avatarStyle = {
-    width: '76px',
-    height: '76px',
-    margin: '0 auto 12px',
+    width: '80px',
+    height: '80px',
+    margin: '0 auto 8px',
     borderRadius: '50%',
     background: 'linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.7) 100%)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: '2.5rem',
+    fontSize: '2.4rem',
     fontWeight: 'bold',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
     };
 
     const usernameStyle = {
-    fontSize: '1.5rem',
+    fontSize: '2rem',
     fontWeight: '700',
     color: '#333'
     };
@@ -47,10 +60,10 @@ const ShowPostSeparately = ({ username = 'Guest' }) =>{
                 
                 if (!response.ok) {
                     throw new Error('Failed to fetch blog post');
-                }
-                
+                }    
                 const data = await response.json();
                 console.log(data);
+                
                 setBlogPost(data);
                 setError(null);
             } catch (err) {
@@ -66,27 +79,35 @@ const ShowPostSeparately = ({ username = 'Guest' }) =>{
         }
     }, [blog_id]);
 
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    
-
-    const getValidImageUrl = (imageUrl) => {
-    return imageUrl; 
-    };
-
-    const handleNextImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % blogPost.images.length);
-    };
-
-    const handlePrevImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex - 1 + blogPost.images.length) % blogPost.images.length);
-    };
+    useEffect(() => {
+        const fetchUsername = async () => {
+            try {
+            const response = await fetch(`https://sdcblogproject.onrender.com/get_username/${blogPost.author_id}`);
+            
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            console.log(data);
+            console.log(data["username : "]);
+            setUsername(data["username : "]); 
+           
+            } catch (error) {
+            console.error('Error fetching username:', error);
+            setUsername(null);
+            }
+        }
+        if (blogPost) {
+            fetchUsername();
+        }
+    }, [blogPost]);
 
     return(
         <>
             <div style={cardStyle} onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
                 onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}>
                 <div style={avatarStyle}>
-                    {initials}
+                    { username.slice(0, 2).toUpperCase()}
                 </div>
                 <h1 style={usernameStyle}>{username}</h1>
             </div>

@@ -36,7 +36,7 @@ const DisplayPost = (props) => {
         margin: '10px',
         position: 'relative'
       }}
-    >
+      >
       {/* Header with AuthorId */}
       <div 
         style={{
@@ -159,6 +159,8 @@ const DisplayPost = (props) => {
           {content}
         </p>
       </div>
+
+      {/* {likes and comments section} */}
     </div>
   );
 };
