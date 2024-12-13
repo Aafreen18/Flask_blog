@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 
 const DisplayPost = (props) => {
-  const { title, content, images, idAuthor } = props;
+  const { title, content, images, idAuthor, blog_id} = props;
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const navigate = useNavigate();
 
   const getValidImageUrl = (imageUrl) => {
     return imageUrl.slice(13); 
@@ -14,6 +17,11 @@ const DisplayPost = (props) => {
 
   const handlePrevImage = () => {
     setCurrentImageIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
+  };
+  console.log(blog_id);
+
+  const handleImageDoubleClick = () => {
+    navigate(`/post/${blog_id}`, { state: { blog_id } });
   };
 
   return (
@@ -70,6 +78,7 @@ const DisplayPost = (props) => {
               borderRadius: '8px',
             }}
             onError={(e) => { e.target.src = '/path/to/placeholder-image.jpg'; }}
+            onDoubleClick={handleImageDoubleClick}
           />
           {images.length > 1 && (
             <>
