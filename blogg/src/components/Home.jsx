@@ -12,6 +12,7 @@ const Home = () => {
   const [jwtToken, setJwtToken] = useState(null);
   const [refreshToken, setRefreshToken] = useState(null);
   const [authorId, setAuthorId] = useState(null);
+  const [reload, setReload] = useState(false);
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -33,7 +34,7 @@ const Home = () => {
     if (jwtToken) {
       fetchBlogs();
     }
-  }, [jwtToken]);
+  }, [jwtToken, reload]);
 
   useEffect(() => {
     if (location.state) {
@@ -62,12 +63,17 @@ const Home = () => {
     }
   }, [location.state]);
 
+  const handlePostCreated = () => {
+    setReload(prev => !prev);
+  };
+
   return (
     <>
       <Navbar username={username} email={email} />
       
       {jwtToken && refreshToken ? (
         <CreatePost
+          onPostCreated={handlePostCreated} 
           jwtToken={jwtToken}
           refreshToken={refreshToken}
           username={username}

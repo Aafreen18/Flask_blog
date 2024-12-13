@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const CreatePost = (props) => {
-  const { jwtToken, refreshToken, username, authorId } = props;
+  const { jwtToken, refreshToken, username, authorId, onPostCreated} = props;
   const [show, setShow] = useState(false);
   const [selectedImages, setSelectedImages] = useState([]);
   const [posts, setPosts] = useState({
@@ -91,6 +91,10 @@ const CreatePost = (props) => {
                 });
                 setSelectedImages([]);
                 setShow(false);
+
+                if (onPostCreated) {
+                  onPostCreated();
+                }
               } else {
                 console.error('Failed to create post:', data);
               }
@@ -106,9 +110,12 @@ const CreatePost = (props) => {
                 author_id: authorId,
                 images: []
             });
-            //reload display post from where
             setSelectedImages([]);
             setShow(false);
+
+            if (onPostCreated) {
+              onPostCreated();
+            }
           } else {
             console.error('Failed to create post:', data);
           }

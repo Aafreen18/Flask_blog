@@ -54,7 +54,6 @@ const DisplayPost = (props) => {
        {images && images.length > 0 ? (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '10px' }}>
           {images.map((image, index) => {
-            // Preprocess the image URL
             const validUrl = `${getValidImageUrl(image["image"])}`;
             console.log(validUrl);
 
@@ -62,7 +61,7 @@ const DisplayPost = (props) => {
               <img
                 key={index}
                 src={validUrl}
-                alt={`Post Image ${index + 1}`}
+                alt={`Post ${index + 1}`}
                 style={{
                   width: '100%',
                   height: '250px',
