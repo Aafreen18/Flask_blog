@@ -32,10 +32,9 @@ const Home = () => {
       }
     };
 
-    if (jwtToken) {
-      fetchBlogs();
-    }
-  }, [jwtToken, reload]);
+    fetchBlogs();
+    
+  }, [reload]);
 
   useEffect(() => {
     if (location.state) {
@@ -106,6 +105,8 @@ const Home = () => {
             idAuthor={curEle.author_id}
             blog_id={curEle.id}
             likes={curEle.likes}
+            jwtToken={jwtToken}
+            refreshToken={refreshToken}
           />
         ))}
       </div>

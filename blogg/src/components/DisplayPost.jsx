@@ -2,7 +2,7 @@ import React, { useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const DisplayPost = (props) => {
-  const { title, content, images, idAuthor, blog_id, likes} = props;
+  const { title, content, images, idAuthor, blog_id, likes, jwtToken, refreshToken} = props;
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const navigate = useNavigate();
 
@@ -28,14 +28,37 @@ const DisplayPost = (props) => {
     navigate(`/post/${blog_id}`, { state: { blog_id } });
   };
 
+  const refreshAccessToken = async () => {
+    try {
+        const response = await fetch(`https://sdcblogproject.onrender.com/refresh_token/${refreshToken}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }    
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          localStorage.setItem('access', data.access);
+          return data.access;
+        } else {
+          return null;
+        }
+    } catch (error) {
+      console.error('Error refreshing token:', error);
+      return null;
+    }
+  };
+
   const handleAddComment = async (e) => {
     e.preventDefault();
     
     try {
-      const response = await fetch(`https://sdcblogproject.onrender.com/api/blogs/${blog_id}/comment/`, {
+      const response = await fetch(`https://sdcblogproject.onrender.com/api/blogs/${blog_id}/comments/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${jwtToken}`
         },
         body: JSON.stringify({
           blog: blog_id,
@@ -44,15 +67,37 @@ const DisplayPost = (props) => {
         })
       });
 
+      if (response.status === 401) {
+        const newToken = await refreshAccessToken();
+        if (newToken) {
+          const retryResponse = await fetch(`https://sdcblogproject.onrender.com/api/blogs/${blog_id}/comments/`, {
+          method: 'POST',
+          headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${jwtToken}`
+        },
+        body: JSON.stringify({
+          blog: blog_id,
+          comment_text: comment,
+          author_id: idAuthor
+        })})
+        
+        const newRetryComment = await retryResponse.json();
+        setComments([...comments, newRetryComment]);
+        setComment(''); 
+        console.log("added");
+
+      }else{
       if (response.ok) {
         const newComment = await response.json();
         setComments([...comments, newComment]);
-        setComment(''); // Clear input after successful submission
+        setComment(''); 
         console.log("added");
       } else {
         console.error('Failed to add comment');
-      }
-    } catch (error) {
+      }}
+
+    } }catch (error) {
       console.error('Error adding comment:', error);
     }
   };
@@ -122,6 +167,28 @@ const DisplayPost = (props) => {
           {idAuthor.charAt(0).toUpperCase()}
         </div>
         <h4 style={{ fontSize: '16px', color: "black", whiteSpace: "normal", wordBreak: "break-word" }}>{idAuthor}</h4>
+      </div>
+
+      {/* Content Section */}
+      <div style={{ 
+        padding: '15px', 
+        borderTop: images ? '1px solid #f0f0f0' : 'none'
+        }}>
+        <h3 style={{ 
+          marginTop: 0, 
+          marginBottom: '10px', 
+          fontSize: '18px', 
+          color: '#333' 
+        }}>
+          {title}
+        </h3>
+        <p style={{ 
+          margin: 0, 
+          color: '#666', 
+          lineHeight: '1.6' 
+        }}>
+          {content}
+        </p>
       </div>
 
       {/* Image Section */}
@@ -196,29 +263,7 @@ const DisplayPost = (props) => {
           No Images Available
         </div>
       )}
-
-      {/* Content Section */}
-      <div style={{ 
-        padding: '15px', 
-        borderTop: images ? '1px solid #f0f0f0' : 'none'
-      }}>
-        <h3 style={{ 
-          marginTop: 0, 
-          marginBottom: '10px', 
-          fontSize: '18px', 
-          color: '#333' 
-        }}>
-          {title}
-        </h3>
-        <p style={{ 
-          margin: 0, 
-          color: '#666', 
-          lineHeight: '1.6' 
-        }}>
-          {content}
-        </p>
-      </div>
-
+      
       {/* {like and comments section} */}
       <div className="blog-interaction d-flex flex-column m-3">
 
@@ -270,7 +315,6 @@ const DisplayPost = (props) => {
         </div>
 
       </div>
-
     </div>
   );
 };
