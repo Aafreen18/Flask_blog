@@ -3,7 +3,7 @@ import logo from '../assets/logo.png';
 import { NavLink } from 'react-router-dom';
 
 const Navbar = (props) =>{
-    const { username, email} = props;
+    const { username, email, userId} = props;
     console.log(email)
     return(
         <>
@@ -48,7 +48,7 @@ const Navbar = (props) =>{
                             isActive ? 'nav-link menu-active' : 'nav-link'
                         }
                         to="/profile"
-                        state={{ email, username }} 
+                        state={{ email, username, userId }} 
                         >
                         View Profile
                         </NavLink>

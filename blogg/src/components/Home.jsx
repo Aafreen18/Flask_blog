@@ -70,7 +70,7 @@ const Home = () => {
 
   return (
     <>
-      <Navbar username={username} email={email} />
+      <Navbar username={username} email={email} userId={authorId} />
       
       {jwtToken && refreshToken ? (
         <CreatePost

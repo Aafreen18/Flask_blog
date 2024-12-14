@@ -175,3 +175,21 @@ label{
     transform: translateY(0);
   }
 }
+
+.profile-card {
+  background-color: #fff;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  text-align: center;
+}
+
+.profile-header h2 {
+  font-size: 24px;
+}
+
+.profile-details p {
+  font-size: 18px;
+  margin: 10px 0;
+}
+
