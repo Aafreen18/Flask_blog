@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 
-
 const DisplayPost = (props) => {
-  const { title, content, images, idAuthor, blog_id} = props;
+  const { title, content, images, idAuthor, blog_id, likes} = props;
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const navigate = useNavigate();
+
+  const [comment, setComment] = useState('');
+  const [comments, setComments] = useState([]);
+  const [like, setlike] = useState(likes);
+  const [hasLiked, setHasLiked] = useState(false);
 
   const getValidImageUrl = (imageUrl) => {
     return imageUrl.slice(13); 
@@ -22,6 +26,61 @@ const DisplayPost = (props) => {
 
   const handleImageDoubleClick = () => {
     navigate(`/post/${blog_id}`, { state: { blog_id } });
+  };
+
+  const handleAddComment = async (e) => {
+    e.preventDefault();
+    
+    try {
+      const response = await fetch(`https://sdcblogproject.onrender.com/api/blogs/${blog_id}/comment/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          blog: blog_id,
+          comment_text: comment,
+          author_id: idAuthor
+        })
+      });
+
+      if (response.ok) {
+        const newComment = await response.json();
+        setComments([...comments, newComment]);
+        setComment(''); // Clear input after successful submission
+        console.log("added");
+      } else {
+        console.error('Failed to add comment');
+      }
+    } catch (error) {
+      console.error('Error adding comment:', error);
+    }
+  };
+
+  const handleLike = async () => {
+    try {
+      const response = await fetch(`https://sdcblogproject.onrender.com/api/blogs/${blog_id}/like/`, {
+        method: hasLiked ? '' : 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          blog: blog_id,
+          author_id: idAuthor
+        })
+      });
+
+      if (response.ok) {
+        const likeData = await response.json();
+        setlike(likeData.total_like);
+        setHasLiked(!hasLiked);
+        console.log("added");
+      } else {
+        console.error('Failed to add like');
+      }
+    } catch (error) {
+      console.error('Error adding like:', error);
+    }
   };
 
   return (
@@ -160,7 +219,58 @@ const DisplayPost = (props) => {
         </p>
       </div>
 
-      {/* {likes and comments section} */}
+      {/* {like and comments section} */}
+      <div className="blog-interaction d-flex flex-column m-3">
+
+        <div className="like-section">
+          <button 
+            onDoubleClick={handleLike} 
+            style={{ 
+              backgroundColor:'white',
+              padding:'2px',
+              marginRight:'3px'
+            }}
+          >
+           <i class="fa-solid fa-heart" style={{color: hasLiked ? 'red' : 'orange',}}></i>
+          </button>
+          <span>{like} Likes</span>
+        </div>
+
+        <div className="comment-section mt-3">
+          <form onSubmit={handleAddComment} style={{display:'flex'}}>
+            <input 
+              type="text"
+              value={comment}
+              style={{width:'100%'}}
+              onChange={(e) => setComment(e.target.value)}
+              placeholder="Write a comment..."
+              required
+            />
+            <button
+                type='submit'
+                className='butt'
+                style={{
+                  backgroundColor: 'white',
+                  padding: '5px 10px'
+                }}
+              >
+              Send
+            </button>
+          </form>
+          
+          {/* Comments Display */}
+          <div className="comments-list">
+            <span>{comments.length} Comments</span>
+            {comments.map((comment, index) => (
+              <div key={index} className="comment">
+                {comment.comment_text}
+              </div>
+            ))}
+          </div>
+        </div>
+
+      </div>
+
     </div>
   );
 };

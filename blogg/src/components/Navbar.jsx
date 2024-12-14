@@ -32,15 +32,14 @@ const Navbar = (props) =>{
                 </div>
 
                 <div className="dropdown mt-1">
-                    <a
+                    <button
                     className="btn btn-light dropdown-toggle"
-                    href="#"
-                    role="button"
+                    type="button"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                     >
                     Me
-                    </a>
+                    </button>
 
                     <ul className="dropdown-menu">
                     <li className="nav-item text-center fw-bolder">
@@ -49,7 +48,7 @@ const Navbar = (props) =>{
                             isActive ? 'nav-link menu-active' : 'nav-link'
                         }
                         to="/profile"
-                        state={{ email }}
+                        state={{ email, username }} 
                         >
                         View Profile
                         </NavLink>

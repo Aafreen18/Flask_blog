@@ -105,6 +105,7 @@ const Home = () => {
             images={curEle.images}
             idAuthor={curEle.author_id}
             blog_id={curEle.id}
+            likes={curEle.likes}
           />
         ))}
       </div>
