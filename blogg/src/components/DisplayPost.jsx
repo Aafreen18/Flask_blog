@@ -231,7 +231,7 @@ const DisplayPost = (props) => {
               marginRight:'3px'
             }}
           >
-           <i class="fa-solid fa-heart" style={{color: hasLiked ? 'red' : 'orange',}}></i>
+           <i className="fa-solid fa-heart" style={{color: hasLiked ? 'red' : 'orange',}}></i>
           </button>
           <span>{like} Likes</span>
         </div>

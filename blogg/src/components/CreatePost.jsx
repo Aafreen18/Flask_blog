@@ -290,7 +290,7 @@ const CreatePost = (props) => {
         </div>
       )}
 
-      <div className='container'>
+      <div className='container justify-content-center'>
         <div className='d-flex flex-column me-3'>
           <div 
             className="Me justify-content-center " 

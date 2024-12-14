@@ -99,7 +99,7 @@ const Home = () => {
       >
         {addItems.map((curEle, idx) => (
           <DisplayPost
-            key={curEle.key} 
+            key={idx} 
             title={curEle.title}
             content={curEle.content}
             images={curEle.images}
