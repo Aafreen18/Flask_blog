@@ -66,6 +66,7 @@ const Profile = () => {
 
         const data = await response.json();
         setItems(data);
+        console.log(data);
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching blogs:', error);
@@ -78,37 +79,45 @@ const Profile = () => {
   }, []);
 
   const handleDeletePost = async (blogId) => {
-  try {
-    const response = await fetch(`https://sdcblogproject.onrender.com/api/blogs/${blogId}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${jwtToken}`
-      }
-    });
 
-    if (response.status === 401) {
-      const newToken = await refreshAccessToken();
-      if (newToken) {
-        const retryResponse = await fetch(`https://sdcblogproject.onrender.com/api/blogs/${blogId}`, {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${newToken}`
+    try {
+      const response = await fetch(`https://sdcblogproject.onrender.com/api/blogs/${blogId}/`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${jwtToken}`
+        },
+        body: JSON.stringify({
+          author_id: userId
+        })
+      });
+
+      if (response.status === 401) {
+        const newToken = await refreshAccessToken();
+        if (newToken) {
+          const retryResponse = await fetch(`https://sdcblogproject.onrender.com/api/blogs/${blogId}/`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${newToken}`
+            },
+            body: JSON.stringify({
+              author_id: userId
+            })
+          });
+
+          if (!retryResponse.ok) {
+            throw new Error('Failed to delete the blog post after retrying.');
           }
-        });
-
-        if (!retryResponse.ok) {
-          throw new Error('Failed to delete the blog post after retrying.');
+        } else {
+          throw new Error('Failed to refresh the token.');
         }
-      } else {
-        throw new Error('Failed to refresh the token.');
+      } else if (!response.ok) {
+        throw new Error('Failed to delete the blog post.');
       }
-    } else if (!response.ok) {
-      throw new Error('Failed to delete the blog post.');
-    }
-        
-    setItems((prevItems) => prevItems.filter((item) => item.id !== blogId));
+          
+      setItems((prevItems) => prevItems.filter((item) => item.id !== blogId));
+      console.log('deleted post successfull');
     } catch (error) {
       console.error('Error deleting blog post:', error);
       alert('Failed to delete the post. Please try again.');
@@ -116,11 +125,11 @@ const Profile = () => {
   };
 
 
-  const handleUpdatePost = (blog) => {
+  const handleUpdatePost = (blog_id) => {
     // Navigate to update page with blog details
-    navigate('/update-post', { 
+    navigate(`/update-post/${blog_id}`, { 
       state: { 
-        blog: blog, 
+        blog_id: blog_id, 
         userId: userId 
       } 
     });
