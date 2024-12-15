@@ -5,7 +5,7 @@ import DisplayPost from './DisplayPost';
 const Profile = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { email, username, userId } = location.state || {};
+  const { username, userId } = location.state || {};
 
   const [addItems, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -142,9 +142,8 @@ const Profile = () => {
       backgroundColor: 'ORANGE',
       borderRadius: '10px',
       boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-      maxWidth: '400px',
-      marginLeft: 'auto',
-      marginRight: 'auto',
+      maxWidth: '100%',
+      margin:'10px',
       textAlign: 'center'
     },
     title: {
@@ -182,13 +181,12 @@ const Profile = () => {
         </div>
         <div className="profile-details">
           <p className="username fw-bold">Username: <span className='fw-medium' style={{color:'orange'}}>{username}</span></p>
-          <p className="email fw-bold">Email: <span className='fw-medium' style={{color:'orange'}}>{email}</span></p>
         </div>
       </div>
 
       {/*your post heading  */}
       <div style={styles.titleContainer}>
-        <h1 style={styles.title}>YOUR POSTS!</h1>
+        <h1 style={styles.title}>YOUR POSTS</h1>
       </div>
 
       <div

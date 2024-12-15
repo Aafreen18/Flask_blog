@@ -22,7 +22,6 @@ const DisplayPost = (props) => {
   const handlePrevImage = () => {
     setCurrentImageIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
   };
-  //console.log(blog_id);
 
   const handleImageDoubleClick = () => {
     navigate(`/post/${blog_id}`, { state: { blog_id } });

@@ -9,7 +9,6 @@ const Home = () => {
   const location = useLocation();
   const [addItems, setItems] = useState([]);
   const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
   const [jwtToken, setJwtToken] = useState(null);
   const [refreshToken, setRefreshToken] = useState(null);
   const [authorId, setAuthorId] = useState(null);
@@ -39,7 +38,6 @@ const Home = () => {
   useEffect(() => {
     if (location.state) {
       setUsername(location.state.username || '');
-      setEmail(location.state.email || '');
     }
 
     const accessToken = localStorage.getItem('access');
@@ -69,7 +67,7 @@ const Home = () => {
 
   return (
     <>
-      <Navbar username={username} email={email} userId={authorId} />
+      <Navbar username={username} userId={authorId} />
       
       {jwtToken && refreshToken ? (
         <CreatePost

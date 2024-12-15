@@ -193,3 +193,12 @@ label{
   margin: 10px 0;
 }
 
+input:focus {
+  border-color: orange !important;
+  outline: none; 
+}
+
+textarea:focus {
+  border-color: orange !important;
+  outline: none; 
+}

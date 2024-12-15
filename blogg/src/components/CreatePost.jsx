@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect  } from 'react';
 
 const CreatePost = (props) => {
   const { jwtToken, refreshToken, username, authorId, onPostCreated} = props;
   const [show, setShow] = useState(false);
   const [selectedImages, setSelectedImages] = useState([]);
+
+  const titleInputRef = useRef(null);
+
   const [posts, setPosts] = useState({
     title: '',
     content: '',
@@ -33,6 +36,12 @@ const CreatePost = (props) => {
     }
   };
 
+  useEffect(() => {
+    if (show && titleInputRef.current) {
+      titleInputRef.current.focus();
+    }
+  }, [show]);
+
   const inputEvent = (event) => {
     const { name, value } = event.target;
 
@@ -43,6 +52,7 @@ const CreatePost = (props) => {
         [name]: value
       };
     });
+   
   };
 
   const handleImageUpload = (e) => {
@@ -201,6 +211,7 @@ const CreatePost = (props) => {
               <input
                 type='text'
                 name='title'
+                ref={titleInputRef}
                 value={posts.title}
                 placeholder='Title'
                 onChange={handlePostInputChange}

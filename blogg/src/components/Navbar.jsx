@@ -3,8 +3,8 @@ import logo from '../assets/logo.png';
 import { NavLink } from 'react-router-dom';
 
 const Navbar = (props) =>{
-    const { username, email, userId} = props;
-    console.log(email)
+    const { username, userId} = props;
+    
     return(
         <>
         <div className="nav-bar align-content-center d-flex justify-content-center align-items-center">
@@ -25,7 +25,7 @@ const Navbar = (props) =>{
                         justifyContent: 'center', 
                         fontWeight: 'bold', 
                         fontSize: '20px', 
-                        color: 'black' 
+                        color: 'orange' 
                     }}
                     >
                     {username && username[0].toUpperCase()}
@@ -37,6 +37,7 @@ const Navbar = (props) =>{
                     type="button"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
+                    style={{color:'orange'}}
                     >
                     Me
                     </button>
@@ -48,7 +49,7 @@ const Navbar = (props) =>{
                             isActive ? 'nav-link menu-active' : 'nav-link'
                         }
                         to="/profile"
-                        state={{ email, username, userId }} 
+                        state={{ username, userId }} 
                         >
                         View Profile
                         </NavLink>
