@@ -82,16 +82,19 @@ const DisplayPost = (props) => {
         })})
         
         const newRetryComment = await retryResponse.json();
+        console.log(newRetryComment);
         setComments([...comments, newRetryComment]);
+        console.log(comments);
         setComment(''); 
-        console.log("added");
+        console.log("added a comment");
 
       }else{
       if (response.ok) {
         const newComment = await response.json();
         setComments([...comments, newComment]);
+        console.log(comments);
         setComment(''); 
-        console.log("added");
+        console.log("added a comment");
       } else {
         console.error('Failed to add comment');
       }}
