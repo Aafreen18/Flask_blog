@@ -11,24 +11,24 @@ const Profile = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-   const [jwtToken, setJwtToken] = useState(null);
-    const [refreshToken, setRefreshToken] = useState(null);
+  const [jwtToken, setJwtToken] = useState(null);
+  const [refreshToken, setRefreshToken] = useState(null);
 
-   useEffect(() => {//obtaining accessToken from local storage
-      const accessToken = localStorage.getItem('access');
-      const storedRefreshToken = localStorage.getItem('refresh');
-      
-      if (accessToken) {
-        setJwtToken(accessToken);
-      }
-  
-      if (storedRefreshToken) {
-        setRefreshToken(storedRefreshToken);
-      } else {
-        console.warn('No refresh token found');
-      }
-  
-    },[jwtToken]);
+  useEffect(() => {//obtaining accessToken from local storage
+    const accessToken = localStorage.getItem('access');
+    const storedRefreshToken = localStorage.getItem('refresh');
+    
+    if (accessToken) {
+      setJwtToken(accessToken);
+    }
+
+    if (storedRefreshToken) {
+      setRefreshToken(storedRefreshToken);
+    } else {
+      console.warn('No refresh token found');
+    }
+
+  },[jwtToken]);
 
   const refreshAccessToken = async () => {//obtaining new accessToken
     try {
