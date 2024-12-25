@@ -59,6 +59,7 @@ const DisplayPost = (props) => {
     e.preventDefault();
     
     try {
+      // Initial request to add a comment
       const response = await fetch(`https://sdcblogproject.onrender.com/api/blogs/${blog_id}/comments/`, {
         method: 'POST',
         headers: {
@@ -71,50 +72,56 @@ const DisplayPost = (props) => {
           author_id: idAuthor
         })
       });
-
+  
       if (response.status === 401) {
-        const newToken = await refreshAccessToken();
+        // Refresh token on 401
+        const newToken = await refreshAccessToken(); // Assume this updates the token globally
         if (newToken) {
+          // Retry request with refreshed token
           const retryResponse = await fetch(`https://sdcblogproject.onrender.com/api/blogs/${blog_id}/comments/`, {
-          method: 'POST',
-          headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${jwtToken}`
-        },
-        body: JSON.stringify({
-          blog: blog_id,
-          comment_text: comment,
-          author_id: idAuthor
-        })})
-        
-        const newRetryComment = await retryResponse.json();
-        console.log(newRetryComment);
-        setCom([...com, newRetryComment]);
-        console.log(comments);
-        setComment(''); 
-        if(onAddingComment) {
-          onAddingComment();
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${newToken}` // Use the new token here
+            },
+            body: JSON.stringify({
+              blog: blog_id,
+              comment_text: comment,
+              author_id: idAuthor
+            })
+          });
+  
+          if (retryResponse.ok) {
+            const newRetryComment = await retryResponse.json();
+            setCom([...com, newRetryComment]);
+            setComment('');
+            if (onAddingComment) {
+              onAddingComment();
+            }
+            console.log("Added a comment after retry");
+          } else {
+            console.error('Failed to add comment after token refresh');
+          }
+        } else {
+          console.error('Failed to refresh token');
         }
-        console.log("added a comment");
-
-      }else{
-      if (response.ok) {
+      } else if (response.ok) {
+        // Handle successful initial request
         const newComment = await response.json();
         setCom([...com, newComment]);
-        console.log(comments);
-        setComment(''); 
-        if(onAddingComment) {
+        setComment('');
+        if (onAddingComment) {
           onAddingComment();
         }
-        console.log("added a comment");
+        console.log("Added a comment");
       } else {
         console.error('Failed to add comment');
-      }}
-
-    } }catch (error) {
+      }
+    } catch (error) {
       console.error('Error adding comment:', error);
     }
   };
+  
 
   const handleLike = async () => {
     try {

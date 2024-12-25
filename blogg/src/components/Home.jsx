@@ -67,6 +67,7 @@ const Home = () => {
 
   const handleComment = () => {
     setReload(prev => !prev);
+    console.log("function is called");
   };
 
   return (
