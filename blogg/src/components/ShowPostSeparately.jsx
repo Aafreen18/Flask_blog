@@ -10,8 +10,6 @@ const ShowPostSeparately = () =>{
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const [showCommentsModal, setShowCommentsModal] = useState(false);
-
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const getValidImageUrl = (imageUrl) => {
     return imageUrl; 
@@ -24,10 +22,6 @@ const ShowPostSeparately = () =>{
     const handlePrevImage = () => {
     setCurrentImageIndex((prevIndex) => (prevIndex - 1 + blogPost.images.length) % blogPost.images.length);
     };
-
-    const toggleCommentsModal = () => {
-        setShowCommentsModal(!showCommentsModal);
-      };
 
     const cardStyle = {
         padding: '10px',
@@ -138,102 +132,163 @@ const ShowPostSeparately = () =>{
                     position: 'relative'
                     }}
                     >
-                    {/* Header with AuthorId */}
-                    <div 
-                        style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        padding: '12px 15px',
-                        borderBottom: '1px solid #f0f0f0'
-                        }}
-                    >
-                    <div 
-                    style={{ 
-                        width: '40px', 
-                        height: '40px', 
-                        backgroundColor: 'rgb(243, 158, 67)', 
-                        borderRadius: '50%', 
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        justifyContent: 'center',
-                        marginRight: '10px',
-                        fontWeight: 'bold',
-                        color: 'white'
-                    }}
-                    >
-                    {blogPost.author_id.charAt(0).toUpperCase()}
-                    </div>
-                        <h4 style={{ fontSize: '16px', color: "black", whiteSpace: "normal", wordBreak: "break-word" }}>{blogPost.author_id}</h4>
+
+                    {/* Title Section */}
+                    <div style={{ 
+                        padding: '10px',
+                        backgroundColor:'lightgrey', 
+                        borderTop: blogPost.images ? '1px solid #f0f0f0' : 'none'
+                        }}>
+                        <h3 style={{ 
+                        marginTop: 0, 
+                        marginBottom: '10px', 
+                        fontSize: '27px', 
+                        color: 'black',
+                        fontFamily:'cursive',
+                        fontWeight:'bold',
+                        textAlign:'justify'
+                        }}>
+                        {blogPost.title}
+                        </h3>
+                        
                     </div>
 
-                    {/* Image Section */}
                     {blogPost.images && blogPost.images.length > 0 ? (
-                    <div style={{ position: 'relative', padding: '10px' }}>
-                        <img
-                            src={getValidImageUrl(blogPost.images[currentImageIndex])}
-                            alt={`Post ${currentImageIndex + 1}`}
-                            style={{
-                            width: '100%',
-                            height: '400px',
-                            objectFit:'contain',
-                            borderRadius: '8px',
-                            }}
-                            onError={(e) => { e.target.src = '/path/to/placeholder-image.jpg'; }}
-                        />
-                        {blogPost.images.length > 1 && (
-                            <>
-                            {/* Previous Button */}
-                            <button
-                                onClick={handlePrevImage}
+                        <div style={{ display: 'flex' }}>
+                            {/* Image Section */}
+                            <div
                                 style={{
-                                position: 'absolute',
-                                top: '50%',
-                                left: '10px',
-                                transform: 'translateY(-50%)',
-                                backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '50%',
-                                width: '30px',
-                                height: '30px',
-                                cursor: 'pointer',
+                                    flex: '0 0 70%',
+                                    position: 'relative',
+                                    height: '450px', // Ensure same height as comments section
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    justifyContent: 'space-between',
+                                    overflow: 'hidden',
                                 }}
                             >
-                                ‹
-                            </button>
+                                <img
+                                    src={getValidImageUrl(blogPost.images[currentImageIndex])}
+                                    alt={`Post ${currentImageIndex + 1}`}
+                                    style={{
+                                        width: '100%',
+                                        height: '100%', // Leaves room for interaction section
+                                        objectFit: 'contain',
+                                    }}
+                                    onError={(e) => { e.target.src = '/path/to/placeholder-image.jpg'; }}
+                                />
+                                {/* Navigation Buttons */}
+                                {blogPost.images.length > 1 && (
+                                    <>
+                                        <button
+                                            onClick={handlePrevImage}
+                                            style={{
+                                                position: 'absolute',
+                                                top: '50%',
+                                                left: '10px',
+                                                transform: 'translateY(-50%)',
+                                                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                                                color: 'white',
+                                                border: 'none',
+                                                borderRadius: '50%',
+                                                width: '30px',
+                                                height: '30px',
+                                                cursor: 'pointer',
+                                            }}
+                                        >
+                                            ‹
+                                        </button>
+                                        <button
+                                            onClick={handleNextImage}
+                                            style={{
+                                                position: 'absolute',
+                                                top: '50%',
+                                                right: '10px',
+                                                transform: 'translateY(-50%)',
+                                                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                                                color: 'white',
+                                                border: 'none',
+                                                borderRadius: '50%',
+                                                width: '30px',
+                                                height: '30px',
+                                                cursor: 'pointer',
+                                            }}
+                                        >
+                                            ›
+                                        </button>
+                                    </>
+                                )}
 
-                            {/* Next Button */}
-                            <button
-                                onClick={handleNextImage}
+                                {/* Like and Comments Section */}
+                                <div
+                                    className="blog-interaction"
+                                    style={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                        padding: '10px 20px',
+                                        boxShadow: '0 -2px 4px rgba(0, 0, 0, 0.1)',
+                                    }}
+                                    >
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '10px',
+                                            color: '#333',
+                                            fontWeight: 'bold',
+                                        }}
+                                        >
+                                        <span>{blogPost.likes} <i className="fa-solid fa-heart" style={{color:'orange'}}></i></span>
+                                        <span>{blogPost.comments.length} <i class="fa-solid fa-comment" style={{color:'orange'}}></i></span>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+
+                            {/* Comments Section */}
+                            <div
                                 style={{
-                                position: 'absolute',
-                                top: '50%',
-                                right: '10px',
-                                transform: 'translateY(-50%)',
-                                backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '50%',
-                                width: '30px',
-                                height: '30px',
-                                cursor: 'pointer',
+                                    flex: '0 0 30%',
+                                    backgroundColor: 'rgb(243, 158, 67)',
+                                    padding: '10px',
+                                    overflowY: 'auto',
+                                    maxHeight: '450px',
+                                    height: '450px', // Matches height with the image div
                                 }}
                             >
-                                ›
-                            </button>
-                            </>
-                        )}
+                                <h3>All Comments</h3>
+                                {blogPost.comments && blogPost.comments.length > 0 ? (
+                                    blogPost.comments.map((comment, index) => (
+                                        <div
+                                            key={index}
+                                            style={{
+                                                marginBottom: '10px',
+                                                padding: '10px',
+                                                backgroundColor: '#fff',
+                                                boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
+                                            }}
+                                        >
+                                            {comment.comment_text}
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div style={{ color: 'white', textAlign: 'center' }}>No Comments Available!</div>
+                                )}
+                            </div>
                         </div>
-                        ) : (
-                        <div style={{ 
-                            width: '100%', 
-                            height: '250px', 
-                            backgroundColor: '#f0f0f0', 
-                            display: 'flex', 
-                            alignItems: 'center', 
-                            justifyContent: 'center',
-                            color: '#aaa' 
-                            }}>
+                    ) : (
+                        <div
+                            style={{
+                                width: '100%',
+                                height: '250px',
+                                backgroundColor: '#f0f0f0',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                color: '#aaa',
+                            }}
+                        >
                             No Images Available
                         </div>
                     )}
@@ -242,83 +297,18 @@ const ShowPostSeparately = () =>{
                     <div style={{ 
                         padding: '15px', 
                         borderTop: blogPost.images ? '1px solid #f0f0f0' : 'none'
-                    }}>
-                        <h3 style={{ 
-                        marginTop: 0, 
-                        marginBottom: '10px', 
-                        fontSize: '18px', 
-                        color: '#333' 
                         }}>
-                        {blogPost.title}
-                        </h3>
+                        
                         <p style={{ 
-                        margin: 0, 
-                        color: '#666', 
-                        lineHeight: '1.6' 
+                        color: '#495057', 
+                        lineHeight: '1.4',
+                        textAlign:'justify',
                         }}>
                         {blogPost.content}
                         </p>
                     </div>
                     
-                    {/* {like and comments section} */}
-                    <div className="blog-interaction d-flex flex-column m-3">
-                        <div className="like-section">
-                            <span>{blogPost.likes} Likes</span>
-                        </div>
-
-                        <div className="comment-section mt-3">
-            
-
-                        <div className="comment-section mt-3 d-flex align-items-center justify-content-between">
-                            <span>{blogPost.comments.length} Comments</span>
-                            <button onClick={toggleCommentsModal} className='butt' style={{ backgroundColor: 'white', padding: '5px 10px' }}>
-                            View All Comments
-                            </button>
-                        </div>
-                        
-                        {showCommentsModal && (
-                            <div
-                            style={{
-                                position: 'fixed',
-                                top: '0',
-                                left: '0',
-                                width: '100%',
-                                height: '100%',
-                                backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                zIndex: '1000',
-                            }}
-                            >
-                            <div
-                            style={{
-                                width: '80%',
-                                maxHeight: '80%',
-                                backgroundColor: 'white',
-                                borderRadius: '10px',
-                                padding: '20px',
-                                overflowY: 'auto',
-                            }}
-                            >
-                            <h3>All Comments</h3>
-                                {blogPost.comments.map((comment, index) => (
-                                <div key={index} className="comment" style={{ marginBottom: '10px' }}>
-                                    {comment.comment_text}
-                                </div>
-                                ))}
-                                <button onClick={toggleCommentsModal} className='butt' style={{ marginTop: '10px', padding: '5px 10px' }}>
-                                Back
-                                </button>
-                            </div>
-                            </div>
-                        )}
-
-                        
-
-                        </div>
-
-                    </div>
+                    
 
                 </div>
             )}

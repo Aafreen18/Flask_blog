@@ -207,7 +207,7 @@ const DisplayPost = (props) => {
         <p style={{ 
           margin: 0, 
           color: '#666', 
-          lineHeight: '1.6' 
+          lineHeight: '1.4',
         }}>
           {content}
         </p>
@@ -298,7 +298,7 @@ const DisplayPost = (props) => {
               marginRight:'3px'
             }}
           >
-           <i className="fa-solid fa-heart" style={{color: hasLiked ? 'red' : 'orange',}}></i>
+          <i className="fa-solid fa-heart" style={{color: hasLiked ? 'red' : 'orange',}}></i>
           </button>
           <span>{like} Likes</span>
         </div>
