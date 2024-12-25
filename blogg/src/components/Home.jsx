@@ -105,6 +105,7 @@ const Home = () => {
             likes={curEle.likes}
             jwtToken={jwtToken}
             refreshToken={refreshToken}
+            comments={curEle.comments}
           />
         ))}
       </div>

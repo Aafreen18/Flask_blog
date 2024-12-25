@@ -2,12 +2,12 @@ import React, { useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const DisplayPost = (props) => {
-  const { title, content, images, idAuthor, blog_id, likes, jwtToken, refreshToken} = props;
+  const { title, content, images, idAuthor, blog_id, likes, jwtToken, refreshToken, comments} = props;
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const navigate = useNavigate();
 
   const [comment, setComment] = useState('');
-  const [comments, setComments] = useState([]);
+  const [com, setCom] = useState([]);
   const [like, setlike] = useState(likes);
   const [hasLiked, setHasLiked] = useState(false);
 
@@ -83,7 +83,7 @@ const DisplayPost = (props) => {
         
         const newRetryComment = await retryResponse.json();
         console.log(newRetryComment);
-        setComments([...comments, newRetryComment]);
+        setCom([...com, newRetryComment]);
         console.log(comments);
         setComment(''); 
         console.log("added a comment");
@@ -91,7 +91,7 @@ const DisplayPost = (props) => {
       }else{
       if (response.ok) {
         const newComment = await response.json();
-        setComments([...comments, newComment]);
+        setCom([...com, newComment]);
         console.log(comments);
         setComment(''); 
         console.log("added a comment");
@@ -106,14 +106,15 @@ const DisplayPost = (props) => {
 
   const handleLike = async () => {
     try {
+      const author_id = localStorage.getItem('author_id');
       const response = await fetch(`https://sdcblogproject.onrender.com/api/blogs/${blog_id}/like/`, {
-        method: hasLiked ? '' : 'PUT',
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           blog: blog_id,
-          author_id: idAuthor
+          author_id: author_id
         })
       });
 
