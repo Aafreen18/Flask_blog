@@ -192,25 +192,36 @@ const DisplayPost = (props) => {
       </div>
 
       {/* Content Section */}
-      <div style={{ 
-        padding: '15px', 
-        borderTop: images ? '1px solid #f0f0f0' : 'none'
-        }}>
-        <h3 style={{ 
-          marginTop: 0, 
-          marginBottom: '10px', 
-          fontSize: '18px', 
-          color: '#333' 
-        }}>
+      <div 
+        style={{ 
+          padding: '15px', 
+          borderTop: images ? '1px solid #f0f0f0' : 'none' 
+        }}
+      >
+        <h3 
+          style={{ 
+            marginTop: 0, 
+            marginBottom: '10px', 
+            fontSize: '18px', 
+            color: '#333' 
+          }}
+        >
           {title}
         </h3>
-        <p style={{ 
-          margin: 0, 
-          color: '#666', 
-          lineHeight: '1.4',
-        }}>
+        <div 
+          style={{ 
+            margin: 0, 
+            color: '#666', 
+            lineHeight: '1.4',
+            whiteSpace: 'nowrap', 
+            overflow: 'hidden', 
+            textOverflow: 'ellipsis', 
+            cursor: 'pointer' 
+          }}
+          onClick={() => navigate(`/post/${blog_id}`, { state: { blog_id } })}
+        >
           {content}
-        </p>
+        </div>
       </div>
 
       {/* Image Section */}
