@@ -65,6 +65,10 @@ const Home = () => {
     setReload(prev => !prev);
   };
 
+  const handleComment = () => {
+    setReload(prev => !prev);
+  };
+
   return (
     <>
       <Navbar username={username} userId={authorId} />
@@ -106,6 +110,7 @@ const Home = () => {
             jwtToken={jwtToken}
             refreshToken={refreshToken}
             comments={curEle.comments}
+            onAddingComment={handleComment}
           />
         ))}
       </div>

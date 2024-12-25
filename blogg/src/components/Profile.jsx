@@ -211,6 +211,7 @@ const Profile = () => {
                 idAuthor={curEle.author_id}
                 blog_id={curEle.id}
                 likes={curEle.likes}
+                comments={curEle.comments}
               />
               <div style={styles.actionButtons}>
                 <button 

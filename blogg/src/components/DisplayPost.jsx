@@ -2,7 +2,7 @@ import React, { useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const DisplayPost = (props) => {
-  const { title, content, images, idAuthor, blog_id, likes, jwtToken, refreshToken, comments} = props;
+  const { title, content, images, idAuthor, blog_id, likes, jwtToken, refreshToken, comments, onAddingComment} = props;
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const navigate = useNavigate();
 
@@ -10,6 +10,7 @@ const DisplayPost = (props) => {
   const [com, setCom] = useState([]);
   const [like, setlike] = useState(likes);
   const [hasLiked, setHasLiked] = useState(false);
+  const [showCommentsModal, setShowCommentsModal] = useState(false);
 
   const getValidImageUrl = (imageUrl) => {
     return imageUrl.slice(13); 
@@ -26,6 +27,11 @@ const DisplayPost = (props) => {
   const handleImageDoubleClick = () => {
     navigate(`/post/${blog_id}`, { state: { blog_id } });
   };
+
+  const toggleCommentsModal = () => {
+    setShowCommentsModal(!showCommentsModal);
+  };
+
 
   const refreshAccessToken = async () => {
     try {
@@ -86,6 +92,9 @@ const DisplayPost = (props) => {
         setCom([...com, newRetryComment]);
         console.log(comments);
         setComment(''); 
+        if(onAddingComment) {
+          onAddingComment();
+        }
         console.log("added a comment");
 
       }else{
@@ -94,6 +103,9 @@ const DisplayPost = (props) => {
         setCom([...com, newComment]);
         console.log(comments);
         setComment(''); 
+        if(onAddingComment) {
+          onAddingComment();
+        }
         console.log("added a comment");
       } else {
         console.error('Failed to add comment');
@@ -304,17 +316,54 @@ const DisplayPost = (props) => {
               >
               Send
             </button>
+
           </form>
-          
-          {/* Comments Display */}
-          <div className="comments-list">
+
+          <div className="comment-section mt-3 d-flex align-items-center justify-content-between">
             <span>{comments.length} Comments</span>
-            {comments.map((comment, index) => (
-              <div key={index} className="comment">
-                {comment.comment_text}
-              </div>
-            ))}
+            <button onClick={toggleCommentsModal} className='butt' style={{ backgroundColor: 'white', padding: '5px 10px' }}>
+              View All Comments
+            </button>
           </div>
+          
+          {showCommentsModal && (
+            <div
+              style={{
+                position: 'fixed',
+                top: '0',
+                left: '0',
+                width: '100%',
+                height: '100%',
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: '1000',
+              }}
+            >
+            <div
+              style={{
+                width: '80%',
+                maxHeight: '80%',
+                backgroundColor: 'white',
+                borderRadius: '10px',
+                padding: '20px',
+                overflowY: 'auto',
+              }}
+            >
+            <h3>All Comments</h3>
+                {comments.map((comment, index) => (
+                  <div key={index} className="comment" style={{ marginBottom: '10px' }}>
+                    {comment.comment_text}
+                  </div>
+                ))}
+                <button onClick={toggleCommentsModal} className='butt' style={{ marginTop: '10px', padding: '5px 10px' }}>
+                  Back
+                </button>
+              </div>
+            </div>
+          )}
+
         </div>
 
       </div>
