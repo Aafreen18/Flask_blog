@@ -48,7 +48,7 @@ Backend: Hosts the Django Rest Framework APIs and PostgreSQL configurations.
 🔍 Search and Filter: Quickly find relevant blogs.
 
 
-🤝 Contributors
+🤝 Contributors<br>
 Mohammad
 
 
