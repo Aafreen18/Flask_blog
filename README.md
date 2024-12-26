@@ -18,8 +18,8 @@ Aesthetic and user-friendly interface powered by Bootstrap.
 🛠️ Technologies Used
 
 Frontend:
-ReactJS: For building dynamic and interactive UI.
-HTML5: Structuring web pages.
+ReactJS: For building dynamic and interactive UI. 
+HTML5: Structuring web pages. 
 CSS3: Styling the website.
 Bootstrap: Ensuring responsiveness with modern UI components.
 
