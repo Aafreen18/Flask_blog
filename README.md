@@ -11,7 +11,7 @@ Easily create blogs with a title, image, and content.<br>
 Aesthetic and user-friendly interface powered by Bootstrap.
 
 
-🛠️ Technologies Used
+🛠️ Technologies Used<br>
 Frontend:<br>
 ReactJS: For building dynamic and interactive UI. <br>
 HTML5: Structuring web pages. <br>
