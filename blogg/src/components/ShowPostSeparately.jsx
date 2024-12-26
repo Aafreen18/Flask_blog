@@ -63,7 +63,7 @@ const ShowPostSeparately = () =>{
                 }    
                 const data = await response.json();
                 console.log(data);
-                
+                console.log(data.created_at);
                 setBlogPost(data);
                 setError(null);
             } catch (err) {
@@ -256,25 +256,37 @@ const ShowPostSeparately = () =>{
                                     maxHeight: '450px',
                                     height: '450px', // Matches height with the image div
                                 }}
-                            >
+                                >
                                 <h3>All Comments</h3>
                                 {blogPost.comments && blogPost.comments.length > 0 ? (
-                                    blogPost.comments.map((comment, index) => (
-                                        <div
-                                            key={index}
-                                            style={{
-                                                marginBottom: '10px',
-                                                padding: '10px',
-                                                backgroundColor: '#fff',
-                                                boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
-                                            }}
-                                        >
-                                            {comment.comment_text}
-                                        </div>
-                                    ))
-                                ) : (
-                                    <div style={{ color: 'white', textAlign: 'center' }}>No Comments Available!</div>
-                                )}
+                                blogPost.comments.map((comment, index) => {
+                                // Parse the created_at field to extract date and time
+                                const createdAt = new Date(comment.created_at);
+                                const date = createdAt.toLocaleDateString(); // Extracts the date
+                                const time = createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Extracts the time
+
+                                return (
+                                <div
+                                    key={index}
+                                    style={{
+                                    marginBottom: '10px',
+                                    padding: '10px',
+                                    backgroundColor: '#fff',
+                                    borderRadius:'10px',
+                                    boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
+                                    }}
+                                >
+                                    <p style={{ margin: 0 }}>{comment.comment_text}</p>
+                                    <small style={{ color: '#555' }}>
+                                    Date: {date} | Time: {time}
+                                    </small>
+                                </div>
+                                );
+                            })
+                            ) : (
+                            <div style={{ color: 'white', textAlign: 'center' }}>No Comments Available!</div>
+                            )}
+
                             </div>
                         </div>
                     ) : (
@@ -307,7 +319,6 @@ const ShowPostSeparately = () =>{
                         {blogPost.content}
                         </p>
                     </div>
-                    
                     
 
                 </div>

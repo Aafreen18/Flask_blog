@@ -358,26 +358,50 @@ const DisplayPost = (props) => {
                 justifyContent: 'center',
                 zIndex: '1000',
               }}
-            >
-            <div
-              style={{
+              >
+              <div
+                style={{
                 width: '80%',
                 maxHeight: '80%',
-                backgroundColor: 'white',
+                backgroundColor: 'orange',
                 borderRadius: '10px',
                 padding: '20px',
                 overflowY: 'auto',
-              }}
-            >
-            <h3>All Comments</h3>
-                {comments.map((comment, index) => (
-                  <div key={index} className="comment" style={{ marginBottom: '10px' }}>
-                    {comment.comment_text}
+                }}
+                >
+                <h3>All Comments</h3>
+              {comments.map((comment, index) => {
+                // Parsing the created_at field to extract date and time
+                const createdAt = new Date(comment.created_at);
+                const date = createdAt.toLocaleDateString(); // Extracts the date
+                const time = createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Extracts the time
+
+                return (
+                  <div
+                    key={index}
+                    className="comment"
+                    style={{
+                      marginBottom: '10px',
+                      padding: '10px',
+                      backgroundColor: '#fff',
+                      borderRadius:'10px',
+                      boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
+                    }}
+                  >
+                    <p style={{ margin: 0 }}>{comment.comment_text}</p>
+                    <small style={{ color: '#555' }}>
+                      Date: {date} | Time: {time}
+                    </small>
                   </div>
-                ))}
-                <button onClick={toggleCommentsModal} className='butt' style={{ marginTop: '10px', padding: '5px 10px' }}>
-                  Back
-                </button>
+                );
+              })}
+              <button
+                onClick={toggleCommentsModal}
+                style={{ marginTop: '10px', padding: '5px 10px' }}
+              >
+                Back
+              </button>
+
               </div>
             </div>
           )}
