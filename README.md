@@ -7,8 +7,10 @@ Welcome to the Blog Website! A dynamic platform where users can create, manage, 
 
 📝 Post Blogs:
 Easily create blogs with a title, image, and content.
+
 🔒 User Authentication:
 Secure login and session management using JWT (JSON Web Token).
+
 📱 Responsive Design:
 Aesthetic and user-friendly interface powered by Bootstrap.
 
