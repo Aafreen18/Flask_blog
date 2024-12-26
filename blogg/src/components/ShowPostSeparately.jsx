@@ -156,27 +156,28 @@ const ShowPostSeparately = () =>{
                     {blogPost.images && blogPost.images.length > 0 ? (
                         <div style={{ display: 'flex' }}>
                             {/* Image Section */}
-                            <div
-                                style={{
-                                    flex: '0 0 70%',
-                                    position: 'relative',
-                                    height: '450px', // Ensure same height as comments section
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    justifyContent: 'space-between',
-                                    overflow: 'hidden',
-                                }}
-                            >
+                                <div
+                                    style={{
+                                        flex: '0 0 70%',
+                                        position: 'relative',
+                                        height: '450px',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        justifyContent: 'space-between',
+                                        overflow: 'hidden',
+                                    }}
+                                >
                                 <img
                                     src={getValidImageUrl(blogPost.images[currentImageIndex])}
                                     alt={`Post ${currentImageIndex + 1}`}
                                     style={{
                                         width: '100%',
-                                        height: '100%', // Leaves room for interaction section
+                                        height: 'calc(100% - 50px)', // Adjusted to make room for interaction section
                                         objectFit: 'contain',
                                     }}
                                     onError={(e) => { e.target.src = '/path/to/placeholder-image.jpg'; }}
                                 />
+                                
                                 {/* Navigation Buttons */}
                                 {blogPost.images.length > 1 && (
                                     <>
@@ -227,9 +228,11 @@ const ShowPostSeparately = () =>{
                                         justifyContent: 'space-between',
                                         alignItems: 'center',
                                         padding: '10px 20px',
+                                        backgroundColor: 'white',
                                         boxShadow: '0 -2px 4px rgba(0, 0, 0, 0.1)',
+                                        height: '50px',
                                     }}
-                                    >
+                                >
                                     <div
                                         style={{
                                             display: 'flex',
@@ -238,11 +241,10 @@ const ShowPostSeparately = () =>{
                                             color: '#333',
                                             fontWeight: 'bold',
                                         }}
-                                        >
+                                    >
                                         <span>{blogPost.likes} <i className="fa-solid fa-heart" style={{color:'orange'}}></i></span>
-                                        <span>{blogPost.comments.length} <i class="fa-solid fa-comment" style={{color:'orange'}}></i></span>
+                                        <span>{blogPost.comments.length} <i className="fa-solid fa-comment" style={{color:'orange'}}></i></span>
                                     </div>
-                                    
                                 </div>
                             </div>
 
@@ -254,54 +256,134 @@ const ShowPostSeparately = () =>{
                                     padding: '10px',
                                     overflowY: 'auto',
                                     maxHeight: '450px',
-                                    height: '450px', // Matches height with the image div
+                                    height: '450px',
                                 }}
-                                >
+                            >
                                 <h3>All Comments</h3>
                                 {blogPost.comments && blogPost.comments.length > 0 ? (
-                                blogPost.comments.map((comment, index) => {
-                                // Parse the created_at field to extract date and time
-                                const createdAt = new Date(comment.created_at);
-                                const date = createdAt.toLocaleDateString(); // Extracts the date
-                                const time = createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Extracts the time
+                                    blogPost.comments.map((comment, index) => {
+                                        const createdAt = new Date(comment.created_at);
+                                        const date = createdAt.toLocaleDateString();
+                                        const time = createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-                                return (
-                                <div
-                                    key={index}
-                                    style={{
-                                    marginBottom: '10px',
-                                    padding: '10px',
-                                    backgroundColor: '#fff',
-                                    borderRadius:'10px',
-                                    boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
-                                    }}
-                                >
-                                    <p style={{ margin: 0 }}>{comment.comment_text}</p>
-                                    <small style={{ color: '#555' }}>
-                                    Date: {date} | Time: {time}
-                                    </small>
-                                </div>
-                                );
-                            })
-                            ) : (
-                            <div style={{ color: 'white', textAlign: 'center' }}>No Comments Available!</div>
-                            )}
-
+                                        return (
+                                            <div
+                                                key={index}
+                                                style={{
+                                                    marginBottom: '10px',
+                                                    padding: '10px',
+                                                    backgroundColor: '#fff',
+                                                    borderRadius: '10px',
+                                                    boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
+                                                }}
+                                            >
+                                                <p style={{ margin: 0 }}>{comment.comment_text}</p>
+                                                <small style={{ color: '#555' }}>
+                                                    Date: {date} | Time: {time}
+                                                </small>
+                                            </div>
+                                        );
+                                    })
+                                ) : (
+                                    <div style={{ color: 'white', textAlign: 'center' }}>No Comments Available!</div>
+                                )}
                             </div>
                         </div>
-                    ) : (
-                        <div
-                            style={{
-                                width: '100%',
-                                height: '250px',
-                                backgroundColor: '#f0f0f0',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                color: '#aaa',
-                            }}
-                        >
-                            No Images Available
+                        ) : (
+                        <div style={{ display: 'flex' }}>
+                            {/* No Image Section with Likes */}
+                            <div
+                                style={{
+                                    flex: '0 0 70%',
+                                    position: 'relative',
+                                    height: '450px',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    justifyContent: 'space-between',
+                                    backgroundColor: '#f0f0f0',
+                                }}
+                            >
+                                {/* No Image Message */}
+                                <div
+                                    style={{
+                                        height: 'calc(100% - 50px)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        color: '#aaa',
+                                    }}
+                                >
+                                    No Images Available
+                                </div>
+
+                                {/* Like and Comments Section */}
+                                <div
+                                    className="blog-interaction"
+                                    style={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                        padding: '10px 20px',
+                                        backgroundColor: 'white',
+                                        boxShadow: '0 -2px 4px rgba(0, 0, 0, 0.1)',
+                                        height: '50px',
+                                    }}
+                                >
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '10px',
+                                            color: '#333',
+                                            fontWeight: 'bold',
+                                        }}
+                                    >
+                                        <span>{blogPost.likes} <i className="fa-solid fa-heart" style={{color:'orange'}}></i></span>
+                                        <span>{blogPost.comments.length} <i className="fa-solid fa-comment" style={{color:'orange'}}></i></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Comments Section */}
+                            <div
+                                style={{
+                                    flex: '0 0 30%',
+                                    backgroundColor: 'rgb(243, 158, 67)',
+                                    padding: '10px',
+                                    overflowY: 'auto',
+                                    maxHeight: '450px',
+                                    height: '450px',
+                                }}
+                            >
+                                <h3>All Comments</h3>
+                                {blogPost.comments && blogPost.comments.length > 0 ? (
+                                    blogPost.comments.map((comment, index) => {
+                                        const createdAt = new Date(comment.created_at);
+                                        const date = createdAt.toLocaleDateString();
+                                        const time = createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                                        return (
+                                            <div
+                                                key={index}
+                                                style={{
+                                                    marginBottom: '10px',
+                                                    padding: '10px',
+                                                    backgroundColor: '#fff',
+                                                    borderRadius: '10px',
+                                                    boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
+                                                }}
+                                            >
+                                                <p style={{ margin: 0 }}>{comment.comment_text}</p>
+                                                <small style={{ color: '#555' }}>
+                                                    Date: {date} | Time: {time}
+                                                </small>
+                                            </div>
+                                        );
+                                    })
+                                ) : (
+                                    <div style={{ color: 'white', textAlign: 'center' }}>No Comments Available!</div>
+                                )}
+                            </div>
                         </div>
                     )}
 
