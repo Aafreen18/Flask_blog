@@ -35,6 +35,9 @@ Manage Blogs: Edit, delete, or view your blogs seamlessly.<br>
 🗂️ Categories and Tags: Organize blogs for easier navigation.<br>
 🔍 Search and Filter: Quickly find relevant blogs.<br>
 
+The project is live and can be accessed here.<br>
+Frontend: https://blog-git-main-aafreen-parveens-projects.vercel.app/<br>
+Backened: https://sdcblogproject.onrender.com/api/blogs/
 
 
 
