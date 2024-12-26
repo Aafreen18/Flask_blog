@@ -4,12 +4,11 @@ Welcome to the Blog Website! A dynamic platform where users can create, manage, 
 
 
 ✨ Features<br>
-📝 Post Blogs:
-Easily create blogs with a title, image, and content.<br>
+📝 Post Blogs:Easily create blogs with a title, image, and content.<br>
 🔒 User Authentication:Secure login and session management using JWT (JSON Web Token).<br>
-📱 Responsive Design:
-Aesthetic and user-friendly interface powered by Bootstrap.
-
+📱 Responsive Design:Aesthetic and user-friendly interface powered by Bootstrap.<br>
+💬 Comments Section: Foster engagement with readers.<br>
+❤️ Like Feature: Allow readers to express their appreciation for blogs.<br>
 
 🛠️ Technologies Used<br>
 Frontend:<br>
@@ -32,18 +31,10 @@ Create a Blog: Provide a title, upload an image, and add your content.<br>
 Manage Blogs: Edit, delete, or view your blogs seamlessly.<br>
 
 
-📂 Project Structure<br>
-Frontend: Contains all ReactJS code for the user interface.<br>
-Backend: Hosts the Django Rest Framework APIs and PostgreSQL configurations.<br>
-
-
 🚀 Future Enhancements<br>
 🗂️ Categories and Tags: Organize blogs for easier navigation.<br>
-💬 Comments Section: Foster engagement with readers.<br>
 🔍 Search and Filter: Quickly find relevant blogs.<br>
 
 
-🤝 Contributors<br>
-Mohammad
 
 
