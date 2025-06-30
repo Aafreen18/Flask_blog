@@ -17,7 +17,7 @@ const Home = () => {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await fetch('https://sdcblogproject.onrender.com/api/blogs/', {
+        const response = await fetch('https://blog-sdc.onrender.com/api/blogs/', {
           method: 'GET'
         });
         if (!response.ok) {

@@ -18,7 +18,7 @@ const Register = () => {
         console.log("Form data:", formData);
         
         try {
-            const response = await fetch("https://sdcblogproject.onrender.com/register/", {
+            const response = await fetch("https://blog-sdc.onrender.com/register/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -28,7 +28,7 @@ const Register = () => {
 
             if (response.ok) {
                 try {
-                    const response = await fetch("https://sdcblogproject.onrender.com/login/", {
+                    const response = await fetch("https://blog-sdc.onrender.com/login/", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",

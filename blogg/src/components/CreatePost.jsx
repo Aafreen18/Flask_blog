@@ -16,7 +16,7 @@ const CreatePost = (props) => {
 
   const refreshAccessToken = async () => {
     try {
-        const response = await fetch(`https://sdcblogproject.onrender.com/refresh_token/${refreshToken}`, {
+        const response = await fetch(`https://blog-sdc.onrender.com/refresh_token/${refreshToken}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -72,7 +72,7 @@ const CreatePost = (props) => {
         }
         
         let currentToken = jwtToken;
-        const response = await fetch('https://sdcblogproject.onrender.com/api/blogs/', {
+        const response = await fetch('https://blog-sdc.onrender.com/api/blogs/', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${currentToken}`,
@@ -83,7 +83,7 @@ const CreatePost = (props) => {
         if (response.status === 401) {
             const newToken = await refreshAccessToken();
             if (newToken) {
-              const retryResponse = await fetch('https://sdcblogproject.onrender.com/api/blogs/', {
+              const retryResponse = await fetch('https://blog-sdc.onrender.com/api/blogs/', {
                   method: 'POST',
                   headers: {
                   'Authorization': `Bearer ${newToken}`

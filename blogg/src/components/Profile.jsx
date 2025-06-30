@@ -32,7 +32,7 @@ const Profile = () => {
 
   const refreshAccessToken = async () => {//obtaining new accessToken
     try {
-        const response = await fetch(`https://sdcblogproject.onrender.com/refresh_token/${refreshToken}`, {
+        const response = await fetch(`https://blog-sdc.onrender.com/refresh_token/${refreshToken}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -56,7 +56,7 @@ const Profile = () => {
     const fetchBlogs = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch('https://sdcblogproject.onrender.com/api/blogs/', {
+        const response = await fetch('https://blog-sdc.onrender.com/api/blogs/', {
           method: 'GET'
         });
 
@@ -81,7 +81,7 @@ const Profile = () => {
   const handleDeletePost = async (blogId) => {
 
     try {
-      const response = await fetch(`https://sdcblogproject.onrender.com/api/blogs/${blogId}/`, {
+      const response = await fetch(`https://blog-sdc.onrender.com/api/blogs/${blogId}/`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -95,7 +95,7 @@ const Profile = () => {
       if (response.status === 401) {
         const newToken = await refreshAccessToken();
         if (newToken) {
-          const retryResponse = await fetch(`https://sdcblogproject.onrender.com/api/blogs/${blogId}/`, {
+          const retryResponse = await fetch(`https://blog-sdc.onrender.com/api/blogs/${blogId}/`, {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json',

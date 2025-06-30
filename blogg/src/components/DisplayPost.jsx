@@ -35,7 +35,7 @@ const DisplayPost = (props) => {
 
   const refreshAccessToken = async () => {
     try {
-        const response = await fetch(`https://sdcblogproject.onrender.com/refresh_token/${refreshToken}`, {
+        const response = await fetch(`https://blog-sdc.onrender.com/refresh_token/${refreshToken}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -60,7 +60,7 @@ const DisplayPost = (props) => {
     
     try {
       // Initial request to add a comment
-      const response = await fetch(`https://sdcblogproject.onrender.com/api/blogs/${blog_id}/comments/`, {
+      const response = await fetch(`https://blog-sdc.onrender.com/api/blogs/${blog_id}/comments/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ const DisplayPost = (props) => {
         const newToken = await refreshAccessToken(); // Assume this updates the token globally
         if (newToken) {
           // Retry request with refreshed token
-          const retryResponse = await fetch(`https://sdcblogproject.onrender.com/api/blogs/${blog_id}/comments/`, {
+          const retryResponse = await fetch(`https://blog-sdc.onrender.com/api/blogs/${blog_id}/comments/`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -126,7 +126,7 @@ const DisplayPost = (props) => {
   const handleLike = async () => {
     try {
       const author_id = localStorage.getItem('author_id');
-      const response = await fetch(`https://sdcblogproject.onrender.com/api/blogs/${blog_id}/like/`, {
+      const response = await fetch(`https://blog-sdc.onrender.com/api/blogs/${blog_id}/like/`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

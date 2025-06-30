@@ -56,7 +56,7 @@ const ShowPostSeparately = () =>{
         const fetchBlogPost = async () => {
             try {
                 setLoading(true);
-                const response = await fetch(`https://sdcblogproject.onrender.com/api/blogs/${blog_id}/`);
+                const response = await fetch(`https://blog-sdc.onrender.com/api/blogs/${blog_id}/`);
                 
                 if (!response.ok) {
                     throw new Error('Failed to fetch blog post');
@@ -82,7 +82,7 @@ const ShowPostSeparately = () =>{
     useEffect(() => {
         const fetchUsername = async () => {
             try {
-            const response = await fetch(`https://sdcblogproject.onrender.com/get_username/${blogPost.author_id}`);
+            const response = await fetch(`https://blog-sdc.onrender.com/get_username/${blogPost.author_id}`);
             
             if (!response.ok) {
                 throw new Error('Network response was not ok');

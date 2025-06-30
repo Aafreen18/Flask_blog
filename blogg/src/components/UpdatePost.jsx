@@ -39,7 +39,7 @@ const UpadatePost = () =>{
 
     const refreshAccessToken = async () => {//obtaining new accessToken
         try {
-            const response = await fetch(`https://sdcblogproject.onrender.com/refresh_token/${refreshToken}`, {
+            const response = await fetch(`https://blog-sdc.onrender.com/refresh_token/${refreshToken}`, {
                 method: 'GET',
                 headers: {
                 'Content-Type': 'application/json'
@@ -121,7 +121,7 @@ const UpadatePost = () =>{
             formData.append('author_id', blogPost.author_id);
             
             let currentToken = jwtToken;
-            const response = await fetch(`https://sdcblogproject.onrender.com/api/blogs/${blog_id}/`, {
+            const response = await fetch(`https://blog-sdc.onrender.com/api/blogs/${blog_id}/`, {
                 method: 'PUT',
                 headers: {
                 'Authorization': `Bearer ${currentToken}`,
@@ -132,7 +132,7 @@ const UpadatePost = () =>{
             if (response.status === 401) {
                 const newToken = await refreshAccessToken();
                 if (newToken) {
-                    const retryResponse = await fetch(`https://sdcblogproject.onrender.com/api/blogs/${blog_id}/`, {
+                    const retryResponse = await fetch(`https://blog-sdc.onrender.com/api/blogs/${blog_id}/`, {
                         method: 'PUT',
                         headers: {
                         'Authorization': `Bearer ${newToken}`
@@ -172,7 +172,7 @@ const UpadatePost = () =>{
         const fetchBlogPost = async () => {
             try {
                 setLoading(true);
-                const response = await fetch(`https://sdcblogproject.onrender.com/api/blogs/${blog_id}/`);
+                const response = await fetch(`https://blog-sdc.onrender.com/api/blogs/${blog_id}/`);
                 
                 if (!response.ok) {
                     throw new Error('Failed to fetch blog post');
@@ -198,7 +198,7 @@ const UpadatePost = () =>{
     useEffect(() => {
         const fetchUsername = async () => {
             try {
-            const response = await fetch(`https://sdcblogproject.onrender.com/get_username/${blogPost.author_id}`);
+            const response = await fetch(`https://blog-sdc.onrender.com/get_username/${blogPost.author_id}`);
             
             if (!response.ok) {
                 throw new Error('Network response was not ok');
